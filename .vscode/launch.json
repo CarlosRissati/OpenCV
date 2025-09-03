@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Teste",
+            "request": "launch",
+            "mainClass": "Teste",
+            "projectName": "opencv_61cafad"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "opencv_61cafad"
+        },
+        {
+            "type": "java",
+            "name": "Debug OpenCV Java",
+            "request": "launch",
+            "mainClass": "src.Main",
+            "classPaths": [
+                "out",
+                "lib/opencv-4120.jar"
+            ],
+            "vmArgs": "-Djava.library.path=${workspaceFolder}/native"
+        }
+    ]
+}
