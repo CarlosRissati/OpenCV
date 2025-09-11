@@ -53,5 +53,66 @@ public class Teste {
             }
             System.out.println();
         }
+
+        double[][] matInter = new double[][]{
+            {10, 15, 20, 15, 10},
+            {20, 17, 14, 12, 10},
+            {30, 19,  8,  9, 10},
+            {40, 27, 14, 10,  6},
+            {50, 35, 20, 11,  2}
+        };
+
+        double[][] matInterRe = new double[][]{
+            {0,0,0},
+            {0,0,0},
+            {0,0,0}
+        };
+
+        for(int i = 0; i < matInterRe.length; i++){
+            for(int j = 0; j < matInterRe[i].length; j++){
+                if(i == (matInterRe.length - 1) && j == (matInterRe[i].length - 1)){
+                    matInterRe[i][j] = matInter[i*2][j*2];
+                }else if(i == (matInterRe.length - 1)){
+                    // System.out.println();
+                    double direita = matInter[i*2][2*j+1];
+                    // System.out.println("direita : " + direita);
+                    double atual = matInter[i*2][j*2];
+                    // System.out.println("atual : " + atual);
+                    matInterRe[i][j] = Math.floor((direita + atual) / 2);
+                    // System.out.println("Contar: " + (direita + atual) / 2);
+                }else if(j == (matInterRe[i].length - 1)){
+                    // System.out.println();
+                    double abaixo = matInter[2*i+1][2*j];
+                    // System.out.println("abaixo: " + abaixo);
+                    double atual = matInter[2*i][2*j];
+                    // System.out.println("atual: " + atual);
+                    matInterRe[i][j] = Math.floor((abaixo + atual) / 2);
+                    // System.out.println("Contar: " + (abaixo + atual) / 2);
+                }else{
+                    // System.out.println();
+                    double direita =  matInter[2*i][2*j+1];
+                    // System.out.println("direita : " + direita);
+                    double abaixo = matInter[2*i+1][2*j];
+                    // System.out.println("abaixo: " + abaixo);
+                    double diagonal = matInter[2*i+1][2*j+1];
+                    // System.out.println("diagnonal: " + diagonal);
+                    double atual = matInter[2*i][2*j];
+                    // System.out.println("atual: " + atual);
+                    matInterRe[i][j] = Math.floor((direita + abaixo + diagonal + atual) / 4);
+                    // System.out.println("Contar: " + (direita + abaixo + diagonal + atual) / 4);
+                }
+                System.out.println();
+                System.out.println(matInterRe[i][j]);
+            }
+        }
+
+        System.out.println();
+        System.out.println();
+        for(int i = 0; i < matInterRe.length; i++){
+            for(int j = 0; j < matInterRe[i].length; j++){
+                System.out.print(matInterRe[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

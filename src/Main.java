@@ -7,11 +7,11 @@ public class Main {
         // System.loadLibrary(Core.NATIVE_LIBRARY_NAME); 
         // System.out.println();
         // System.out.println(Core.NATIVE_LIBRARY_NAME);
-        System.load("C:\\Users\\carlo\\OneDrive\\Desktop\\faculdade\\zeluis\\grafica\\opencv\\native\\opencv_java4120.dll");
+        System.load("D:\\Coisas\\estudos\\faculdade\\ZeLuis\\CompGrafica\\opencv\\OpenCV\\native\\opencv_java4110.dll");
     }
 
     public static void main(String[] args) {
-        String filename = "suisilvio";
+        String filename = "gato";
         String fileFormat = ".png";
         Mat img = Imgcodecs.imread(filename + fileFormat);
         // System.out.println(img.type());
@@ -36,16 +36,13 @@ public class Main {
                 imgResultantequadrado.put(2*i + 1, 2*j + 1, img.get(i, j));
             }
         }
-        Imgcodecs.imwrite(filename + "zoomquadrado" + fileFormat, imgResultantequadrado);
+        Imgcodecs.imwrite(filename + "ZoomInQuadrado" + fileFormat, imgResultantequadrado);
 
         Mat imgResultanteInterpolado = new Mat(img.rows() * 2 - 1, img.cols() * 2 - 1, 16);
         for(int i = 0; i < img.rows(); i++){
             for(int j = 0; j < img.cols(); j++){
                 imgResultanteInterpolado.put(2*i, 2*j, img.get(i, j));
             }
-            // for(int j = 0; j < img.cols(); j++){
-            //     imgResultanteInterpolado.put(2*i, 2*j, img.get(i, j));
-            // }
         }
 
         for(int i = 0; i < imgResultanteInterpolado.rows(); i++){
@@ -83,6 +80,53 @@ public class Main {
             }
         }
 
-        Imgcodecs.imwrite(filename + "Interpolado" + fileFormat, imgResultanteInterpolado);
+        Imgcodecs.imwrite(filename + "ZoomInInterpolado" + fileFormat, imgResultanteInterpolado);
+
+        Mat imgResulQuadOut = new Mat(imgResultantequadrado.rows() / 2, imgResultantequadrado.cols() / 2, 16);
+        for(int i = 0; i < imgResulQuadOut.rows(); i++){
+            for(int j = 0; j < imgResulQuadOut.cols(); j++){
+                imgResulQuadOut.put(i, j, imgResultantequadrado.get(i*2, j*2));
+            }
+        }
+        Imgcodecs.imwrite(filename + "ZoomOutQuadrado" + fileFormat, imgResulQuadOut);
+
+        Mat imgResulInterOut = new Mat((int)(Math.floor(imgResultanteInterpolado.rows() / 2)), (int)(Math.floor(imgResultanteInterpolado.cols() /2)), 16);
+        for(int i = 0; i < imgResulInterOut.rows(); i++){
+            for(int j = 0; j < imgResulInterOut.cols(); j++){
+                if(i == (imgResulInterOut.rows() - 1) && j == (imgResulInterOut.cols() - 1)){
+                    imgResulInterOut.put(i, j, imgResultanteInterpolado.get(i*2, j*2));
+                }else if(i == (imgResulInterOut.rows() - 1)){
+                    double[] direita = imgResultanteInterpolado.get(2*i, 2*j+1);
+                    double[] atual = imgResultanteInterpolado.get(2*i, 2*j);
+                    double[] result = new double[]{
+                        Math.floor((direita[0] + atual[0])/2),
+                        Math.floor((direita[1] + atual[1])/2),
+                        Math.floor((direita[2] + atual[2])/2)
+                    };
+                    imgResulInterOut.put(i, j, result);
+                }else if(j == (imgResulInterOut.cols() - 1)){
+                    double[] abaixo = imgResultanteInterpolado.get(2*i+1, 2*j);
+                    double[] atual = imgResultanteInterpolado.get(2*i, 2*j);
+                    double[] result = new double[]{
+                        Math.floor((abaixo[0] + atual[0])/2),
+                        Math.floor((abaixo[1] + atual[1])/2),
+                        Math.floor((abaixo[2] + atual[2])/2)
+                    };
+                    imgResulInterOut.put(i, j, result);
+                }else{
+                    double[] direita = imgResultanteInterpolado.get(2*i, 2*j+1);
+                    double[] abaixo = imgResultanteInterpolado.get(2*i+1, 2*j);
+                    double[] diagnonal = imgResultanteInterpolado.get(2*i+1, 2*j+1);
+                    double[] atual = imgResultanteInterpolado.get(2*i, 2*j);
+                    double[] result = new double[]{
+                        Math.floor((direita[0] + abaixo[0] + diagnonal[0] + atual[0])/4),
+                        Math.floor((direita[1] + abaixo[1] + diagnonal[1] + atual[1])/4),
+                        Math.floor((direita[2] + abaixo[2] + diagnonal[2] + atual[2])/4)
+                    };
+                    imgResulInterOut.put(i, j, result);
+                }
+            }
+        }
+        Imgcodecs.imwrite(filename + "ZoomOutInterpolado" + fileFormat, imgResulInterOut);
     }
 }
